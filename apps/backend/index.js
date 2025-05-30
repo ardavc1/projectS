@@ -9,63 +9,101 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
-// Basit endpoint → tüm kullanıcıları getirir
+// Kullanıcılar
 app.get('/users', async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
-});
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-// POST /users → yeni kullanıcı ekle
-app.post('/users', async (req, res) => {
-  const { email, name, password } = req.body;
-
   try {
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        name,
-        password
-      },
-    });
-    res.json(newUser);
+    const users = await prisma.user.findMany();
+    res.json(users);
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 
-// GET /events → tüm eventleri getir
+app.post('/users', async (req, res) => {
+  const { email, name, password } = req.body;
+  try {
+    const newUser = await prisma.user.create({ data: { email, name, password } });
+    res.json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create user' });
+  }
+});
+
+// Etkinlikler
 app.get('/events', async (req, res) => {
   try {
     const events = await prisma.event.findMany();
     res.json(events);
   } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Failed to fetch events' });
   }
 });
 
-// POST /events → yeni event ekle
 app.post('/events', async (req, res) => {
   const { title, description, location, date } = req.body;
-
   try {
     const newEvent = await prisma.event.create({
-      data: {
-        title,
-        description,
-        location,
-        date: new Date(date) // tarih string ise Date objesine çeviriyoruz
-      },
+      data: { title, description, location, date: new Date(date) },
     });
     res.json(newEvent);
   } catch (error) {
-    console.error('Error creating event:', error);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Failed to create event' });
   }
+});
+
+// Organizasyonlar
+app.get('/organizations', async (req, res) => {
+  try {
+    const organizations = await prisma.organization.findMany({
+      include: {
+        members: { include: { user: true } },
+        owner: true,
+      },
+    });
+    res.json(organizations);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch organizations' });
+  }
+});
+
+app.post('/organizations', async (req, res) => {
+  const { name, description, ownerId } = req.body;
+  try {
+    const organization = await prisma.organization.create({
+      data: {
+        name,
+        description,
+        owner: { connect: { id: ownerId } },
+      },
+    });
+    res.json(organization);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create organization' });
+  }
+});
+
+app.post('/organizations/:id/join', async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+  try {
+    const membership = await prisma.organizationMembership.create({
+      data: {
+        user: { connect: { id: userId } },
+        organization: { connect: { id: parseInt(id) } },
+      },
+    });
+    res.json(membership);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to join organization' });
+  }
+});
+
+// Basit ana sayfa
+app.get('/', (req, res) => {
+  res.send('Sosyalizer Backend Çalışıyor 🚀');
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
