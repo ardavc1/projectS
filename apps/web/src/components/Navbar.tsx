@@ -1,48 +1,22 @@
-"use client";
-
-import Link from "next/link";
+// apps/web/src/components/Navbar.tsx
 
 export default function Navbar() {
-  return (
-    <nav className="bg-white border-b border-purple-200 px-8 py-4 flex items-center justify-between">
-      {/* Logo */}
-      <div className="text-2xl font-bold text-[#7E0FBA]">
-        Sosyalizer
-      </div>
-
-      {/* Menu */}
-      <div className="flex space-x-6 text-gray-700 font-medium">
-        <Link
-          href="/"
-          className="hover:text-[#9f3ad3] transition-colors duration-200"
-        >
-          Ana Sayfa
-        </Link>
-        <Link
-          href="/users"
-          className="hover:text-[#9f3ad3] transition-colors duration-200"
-        >
-          Kullanıcılar
-        </Link>
-        <Link
-          href="/organizations"
-          className="hover:text-[#9f3ad3] transition-colors duration-200"
-        >
-          Organizasyonlar
-        </Link>
-        <Link
-          href="/events"
-          className="hover:text-[#9f3ad3] transition-colors duration-200"
-        >
-          Etkinlikler
-        </Link>
-        <Link
-          href="/profile"
-          className="hover:text-[#9f3ad3] transition-colors duration-200"
-        >
-          Profil
-        </Link>
-      </div>
-    </nav>
-  );
-}
+    return (
+      <nav className="h-16 px-8 flex items-center justify-between border-b border-gray-200 bg-gray-50">
+        {/* LOGO */}
+        <a href="/" className="flex items-center space-x-2">
+          <img src="/longlogo.png" alt="Sosyalizer Logo" className="h-8 w-auto object-contain" />
+        </a>
+  
+        {/* NAV LINKS */}
+        <div className="flex space-x-6 text-sm font-medium text-gray-700">
+          <a href="/" className="hover:text-[#7E0FBA]">Ana Sayfa</a>
+          <a href="/users" className="hover:text-[#7E0FBA]">Kullanıcılar</a>
+          <a href="/organizations" className="hover:text-[#7E0FBA]">Organizasyonlar</a>
+          <a href="/events" className="hover:text-[#7E0FBA]">Etkinlikler</a>
+          <a href="/profile" className="hover:text-[#7E0FBA]">Profil</a>
+        </div>
+      </nav>
+    );
+  }
+  
