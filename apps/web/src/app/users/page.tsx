@@ -63,28 +63,61 @@ export default function UsersPage() {
 
       {/* User List */}
       <Card>
-        <CardContent className="p-4 space-y-2">
-          {Array.isArray(users) && users.length > 0 ? (
-            <ul className="space-y-2">
-              {users.map((user) => (
-                <li key={user.id} className="flex justify-between items-center">
-                  <div>
-                    <strong>{user.name}</strong> - {user.email}
-                  </div>
-                  <a
-                    href={`/users/${user.id}`}
-                    className="text-blue-500 underline"
-                  >
-                    View Details
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No users found.</p>
-          )}
-        </CardContent>
-      </Card>
+  <CardContent className="p-4 space-y-2">
+    {Array.isArray(users) && users.length > 0 ? (
+      <ul className="space-y-2">
+        {users.map((user) => (
+          <li key={user.id} className="flex justify-between items-center">
+            <div>
+              <strong>{user.name}</strong> - {user.email}
+            </div>
+            <div className="flex items-center space-x-2">
+              <a
+                href={`/users/${user.id}`}
+                className="text-blue-500 underline"
+              >
+                View Details
+              </a>
+              <Button
+                variant="destructive"
+                onClick={async () => {
+                  const confirmed = confirm(
+                    `Are you sure you want to delete ${user.name}?`
+                  );
+                  if (confirmed) {
+                    try {
+                      const res = await fetch(
+                        `http://localhost:4000/users/${user.id}`,
+                        {
+                          method: "DELETE",
+                        }
+                      );
+                      if (res.ok) {
+                        setUsers((prev) =>
+                          prev.filter((u) => u.id !== user.id)
+                        );
+                        alert("User deleted!");
+                      } else {
+                        alert("Failed to delete user");
+                      }
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>No users found.</p>
+    )}
+  </CardContent>
+</Card>
+
 
       {/* Create User Form */}
       <Card>

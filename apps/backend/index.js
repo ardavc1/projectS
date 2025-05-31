@@ -144,3 +144,30 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
+app.delete('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await prisma.user.delete({
+      where: { id: Number(id) }, // eğer id number ise
+    });
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
+
+
+app.delete('/events/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedEvent = await prisma.event.delete({
+      where: { id: Number(id) },
+    });
+    res.json(deletedEvent);
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.status(500).json({ error: 'Failed to delete event' });
+  }
+});
+
