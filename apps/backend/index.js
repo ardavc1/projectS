@@ -171,3 +171,64 @@ app.delete('/events/:id', async (req, res) => {
   }
 });
 
+
+app.get('/events/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        organization: true,
+      },
+    });
+
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    res.json(event);
+  } catch (error) {
+    console.error('Error fetching event:', error);
+    res.status(500).json({ error: 'Failed to fetch event' });
+  }
+});
+
+app.get('/organizations/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const organization = await prisma.organization.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        owner: true,
+        members: { include: { user: true } },
+        events: true,
+      },
+    });
+
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
+    }
+
+    res.json(organization);
+  } catch (error) {
+    console.error('Error fetching organization:', error);
+    res.status(500).json({ error: 'Failed to fetch organization' });
+  }
+});
+
+app.delete('/organizations/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedOrganization = await prisma.organization.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.json(deletedOrganization);
+  } catch (error) {
+    console.error('Error deleting organization:', error);
+    res.status(500).json({ error: 'Failed to delete organization' });
+  }
+});
