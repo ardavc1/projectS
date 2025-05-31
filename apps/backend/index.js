@@ -78,15 +78,16 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.post('/organizations', async (req, res) => {
-  const { name, description, ownerId, bannerUrl } = req.body;
-
+  const { name, description, ownerId, bannerUrl, logoUrl, category } = req.body;
   try {
     const organization = await prisma.organization.create({
       data: {
         name,
         description,
         owner: { connect: { id: ownerId } },
-        bannerUrl: bannerUrl || null,
+        bannerUrl,
+        logoUrl, // LOGO URL EKLENDİ 🚀
+        category,
       },
     });
     res.json(organization);
@@ -94,6 +95,7 @@ app.post('/organizations', async (req, res) => {
     res.status(500).json({ error: 'Failed to create organization' });
   }
 });
+
 
 
 app.post('/organizations/:id/join', async (req, res) => {
