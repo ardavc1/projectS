@@ -40,16 +40,25 @@ app.get('/events', async (req, res) => {
 });
 
 app.post('/events', async (req, res) => {
-  const { title, description, location, date } = req.body;
+  const { title, description, location, date, organizationId } = req.body; // organizationId'yi de alıyoruz!
+  
   try {
     const newEvent = await prisma.event.create({
-      data: { title, description, location, date: new Date(date) },
+      data: {
+        title,
+        description,
+        location,
+        date: new Date(date),
+        organizationId: Number(organizationId), // Number dönüşümü güvenli olsun diye
+      },
     });
     res.json(newEvent);
   } catch (error) {
+    console.error('Error creating event:', error); // Daha iyi log
     res.status(500).json({ error: 'Failed to create event' });
   }
 });
+
 
 // Organizasyonlar
 app.get('/organizations', async (req, res) => {
@@ -107,3 +116,31 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// GET /users/:id → user detay + memberOrganizations
+app.get('/users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        memberOrganizations: {
+          include: {
+            organization: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
