@@ -26,7 +26,9 @@ model Organization {
   name        String
   description String?
   createdAt   DateTime @default(now())
-  bannerUrl   String?  // organizasyon banner görseli
+  bannerUrl   String?  // Banner görseli (üst görsel)
+  logoUrl     String?  // Logo (bindirilmiş küçük yuvarlak görsel)
+  category    String?  // Kategori etiketi
 
   // Owner
   ownerId     Int
@@ -36,6 +38,7 @@ model Organization {
   members     OrganizationMembership[]
   events      Event[]
 }
+
 
 
 model OrganizationMembership {
