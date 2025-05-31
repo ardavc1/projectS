@@ -1,8 +1,12 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // İstediğin kalınlıkları burada belirleyebilirsin
+});
 
 export const metadata = {
   title: "Sosyalizer",
@@ -21,7 +25,7 @@ export default function RootLayout({
         <title>Sosyalizer</title>
         <meta name="description" content="Sosyalliği ve arkadaşlığı buluşturan platform" />
       </head>
-      <body className={inter.className + " bg-white text-gray-900"}>
+      <body className={montserrat.className + " bg-white text-gray-900"}>
         <Navbar />
         <main className="p-8">{children}</main>
       </body>

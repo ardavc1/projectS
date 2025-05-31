@@ -99,7 +99,7 @@ export default function OrganizationDetailPage() {
         {/* LEFT - MAIN */}
         <div className="flex-1 space-y-4">
           <h2 className="text-2xl font-bold">Kısaca Biz</h2>
-          <p className="text-gray-700 whitespace-pre-line">
+          <p className="text-gray-800 whitespace-pre-line">
             {organization.description || "Henüz açıklama eklenmemiş."}
           </p>
         </div>
