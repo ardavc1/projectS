@@ -9,7 +9,7 @@ interface User {
   password: string;
 }
 
-<h1 className="text-3xl font-bold text-blue-600">Users</h1>
+
 
 
 export default function UsersPage() {
@@ -17,6 +17,7 @@ export default function UsersPage() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
 
   useEffect(() => {
     fetch('http://localhost:4000/users')
@@ -65,7 +66,8 @@ export default function UsersPage() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Users</h1>
+
+      <h1 className="text-3xl font-bold text-blue-600">Users</h1>
 
       <ul>
         {Array.isArray(users) && users.map(user => (
