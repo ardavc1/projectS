@@ -1,28 +1,39 @@
-// src/components/Footer.tsx
-
 import { FaInstagram, FaTwitter, FaLinkedin, FaYoutube, FaFacebookF } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#111827] text-gray-400 mt-16 pt-12 px-8 pb-6 text-sm">
-      {/* Üst kısım: logo + sosyal medya */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+    <footer className="bg-[#1D1F23] text-gray-400 mt-16 pt-12 px-8 pb-6 text-sm">
+      {/* Üst: LOGO + İKONLAR + APP BUTTONS */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
         {/* Logo */}
         <a href="/" className="mb-6 md:mb-0">
-          <img src="/longlogo.png" alt="Sosyalizer" className="w-44" />
+          <img src="/longlogoW.png" alt="Sosyalizer" className="w-44" />
         </a>
 
-        {/* Sosyal medya ikonları */}
-        <div className="flex space-x-4 text-xl text-white">
-          <a href="#" className="hover:text-primary"><FaInstagram /></a>
-          <a href="#" className="hover:text-primary"><FaTwitter /></a>
-          <a href="#" className="hover:text-primary"><FaLinkedin /></a>
-          <a href="#" className="hover:text-primary"><FaYoutube /></a>
-          <a href="#" className="hover:text-primary"><FaFacebookF /></a>
+        {/* Sağ taraf: İkonlar + App buttons */}
+        <div className="flex items-center space-x-6">
+          {/* Sosyal ikonlar */}
+          <div className="flex space-x-4 text-xl text-white">
+            <a href="#" className="hover:text-primary"><FaInstagram /></a>
+            <a href="#" className="hover:text-primary"><FaTwitter /></a>
+            <a href="#" className="hover:text-primary"><FaLinkedin /></a>
+            <a href="#" className="hover:text-primary"><FaYoutube /></a>
+            <a href="#" className="hover:text-primary"><FaFacebookF /></a>
+          </div>
+
+          {/* App Store buttons */}
+          <div className="flex space-x-2">
+            <a href="#">
+              <img src="/appstore.png" alt="App Store’dan İndir" className="w-32" />
+            </a>
+            <a href="#">
+              <img src="/googleplay.png" alt="Google Play’den İndir" className="w-32" />
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Grid linkler */}
+      {/* Grid: link kolonları */}
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
         {/* Kolon 1 */}
         <div className="space-y-2">
@@ -61,25 +72,29 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Haberdar Ol alanı */}
+      {/* Haberdar Ol */}
       <div className="max-w-7xl mx-auto border-t border-gray-700 pt-8 mb-8">
-        <h4 className="text-white font-bold mb-4 text-lg">Haberdar Ol!</h4>
-        <p className="mb-4 text-gray-400">
-          E-posta adresine iş ve staj ilanları, etkinlikler, kariyer tavsiyeleri gibi içerikler göndereceğiz.
-        </p>
-        <form className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <input
-            type="email"
-            placeholder="E-posta adresiniz"
-            className="px-4 py-3 rounded w-full sm:w-96 bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-primary outline-none"
-          />
-          <button
-            type="submit"
-            className="px-6 py-3 bg-primary text-white rounded hover:bg-primary-hover transition"
-          >
-            Kayıt Ol
-          </button>
-        </form>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+          <div>
+            <h4 className="text-white font-bold mb-2 text-lg">Haberdar Ol!</h4>
+            <p className="text-gray-400">
+              E-posta adresine iş ve staj ilanları, etkinlikler, kariyer tavsiyeleri gibi içerikler göndereceğiz.
+            </p>
+          </div>
+          <form className="flex space-x-2 w-full md:w-auto">
+            <input
+              type="email"
+              placeholder="E-posta adresiniz"
+              className="px-4 py-3 rounded bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-primary outline-none w-full md:w-80"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-primary text-white rounded hover:bg-primary-hover transition"
+            >
+              Kayıt Ol
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* En alt copyright */}
