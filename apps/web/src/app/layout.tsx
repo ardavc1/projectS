@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 import { Montserrat } from "next/font/google";
 
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className={montserrat.className + " bg-white text-gray-900"}>
         <Navbar />
         <main className="p-8">{children}</main>
+        <Footer />
       </body>
     </html>
   );
