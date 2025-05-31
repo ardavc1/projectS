@@ -13,6 +13,7 @@ export default function EventsPage() {
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [organizationId, setOrganizationId] = useState("");
+  const [imageUrl, setImageUrl] = useState(""); // Görsel URL state
 
   useEffect(() => {
     fetch("http://localhost:4000/events")
@@ -43,20 +44,23 @@ export default function EventsPage() {
           location,
           date,
           organizationId,
+          imageUrl, // Görsel URL de body'ye ekleniyor
         }),
       });
 
       if (res.ok) {
         const newEvent = await res.json();
         setEvents((prev) => [...prev, newEvent]);
+        // Form temizle
         setTitle("");
         setDescription("");
         setLocation("");
         setDate("");
         setOrganizationId("");
-        alert("Event created!");
+        setImageUrl("");
+        alert("Etkinlik oluşturuldu!");
       } else {
-        alert("Failed to create event");
+        alert("Etkinlik oluşturulamadı.");
       }
     } catch (err) {
       console.error(err);
@@ -64,7 +68,7 @@ export default function EventsPage() {
   };
 
   const handleDeleteEvent = async (id: number) => {
-    const confirmed = confirm("Are you sure you want to delete this event?");
+    const confirmed = confirm("Bu etkinliği silmek istediğinize emin misiniz?");
     if (!confirmed) return;
 
     try {
@@ -74,9 +78,9 @@ export default function EventsPage() {
 
       if (res.ok) {
         setEvents((prev) => prev.filter((e) => e.id !== id));
-        alert("Event deleted!");
+        alert("Etkinlik silindi!");
       } else {
-        alert("Failed to delete event");
+        alert("Etkinlik silinemedi.");
       }
     } catch (err) {
       console.error(err);
@@ -85,49 +89,58 @@ export default function EventsPage() {
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-3xl font-bold text-blue-600">Events</h1>
+      <h1 className="text-3xl font-bold text-[#7E0FBA]">Etkinlikler</h1>
 
-      {/* Event List */}
+      {/* Etkinlik Listesi */}
       <Card>
-  <CardContent className="p-4 space-y-2">
-    {Array.isArray(events) && events.length > 0 ? (
-      <ul className="space-y-2">
-        {events.map((event) => (
-          <li key={event.id} className="flex justify-between items-center">
-            <div>
-              <strong>{event.title}</strong> - {event.location} -{" "}
-              {new Date(event.date).toLocaleDateString()}
-            </div>
-            <div className="flex items-center space-x-2">
-              <a
-                href={`/events/${event.id}`}
-                className="text-blue-500 underline"
-              >
-                View Details
-              </a>
-              <Button
-                variant="destructive"
-                onClick={() => handleDeleteEvent(event.id)}
-              >
-                Delete
-              </Button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No events found.</p>
-    )}
-  </CardContent>
-</Card>
+        <CardContent className="p-4 space-y-2">
+          {Array.isArray(events) && events.length > 0 ? (
+            <ul className="space-y-2">
+              {events.map((event) => (
+                <li key={event.id} className="flex justify-between items-center">
+                  <div className="flex items-center space-x-4">
+                    {event.imageUrl && (
+                      <img
+                        src={event.imageUrl}
+                        alt={event.title}
+                        className="w-16 h-16 object-cover rounded-md"
+                      />
+                    )}
+                    <div>
+                      <strong className="text-[#7E0FBA]">{event.title}</strong> - {event.location} -{" "}
+                      {new Date(event.date).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <a
+                      href={`/events/${event.id}`}
+                      className="text-blue-500 underline"
+                    >
+                      Detaylar
+                    </a>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleDeleteEvent(event.id)}
+                    >
+                      Sil
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Henüz etkinlik yok.</p>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* Create Event Form */}
+      {/* Yeni Etkinlik Oluştur Formu */}
       <Card>
         <CardContent className="p-4 space-y-4">
-          <h2 className="text-xl font-semibold">Create New Event</h2>
+          <h2 className="text-xl font-semibold">Yeni Etkinlik Oluştur</h2>
           <form onSubmit={handleCreateEvent} className="space-y-4">
             <div>
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Başlık</Label>
               <Input
                 id="title"
                 type="text"
@@ -137,7 +150,7 @@ export default function EventsPage() {
               />
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Açıklama</Label>
               <Input
                 id="description"
                 type="text"
@@ -146,7 +159,7 @@ export default function EventsPage() {
               />
             </div>
             <div>
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">Konum</Label>
               <Input
                 id="location"
                 type="text"
@@ -155,7 +168,7 @@ export default function EventsPage() {
               />
             </div>
             <div>
-              <Label htmlFor="date">Date</Label>
+              <Label htmlFor="date">Tarih</Label>
               <Input
                 id="date"
                 type="date"
@@ -165,7 +178,7 @@ export default function EventsPage() {
               />
             </div>
             <div>
-              <Label htmlFor="organizationId">Organization ID</Label>
+              <Label htmlFor="organizationId">Organizasyon ID</Label>
               <Input
                 id="organizationId"
                 type="number"
@@ -174,7 +187,19 @@ export default function EventsPage() {
                 required
               />
             </div>
-            <Button type="submit">Create Event</Button>
+            <div>
+              <Label htmlFor="imageUrl">Görsel URL</Label>
+              <Input
+                id="imageUrl"
+                type="text"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+            <Button type="submit" className="bg-[#7E0FBA] hover:bg-[#9f3ad3] text-white">
+              Etkinlik Oluştur
+            </Button>
           </form>
         </CardContent>
       </Card>

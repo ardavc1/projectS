@@ -40,8 +40,8 @@ app.get('/events', async (req, res) => {
 });
 
 app.post('/events', async (req, res) => {
-  const { title, description, location, date, organizationId } = req.body; // organizationId'yi de alıyoruz!
-  
+  const { title, description, location, date, organizationId, imageUrl } = req.body; // 👈 imageUrl de destructure ettik
+
   try {
     const newEvent = await prisma.event.create({
       data: {
@@ -49,15 +49,17 @@ app.post('/events', async (req, res) => {
         description,
         location,
         date: new Date(date),
-        organizationId: Number(organizationId), // Number dönüşümü güvenli olsun diye
+        organizationId: Number(organizationId),
+        imageUrl: imageUrl || null, // 👈 imageUrl kaydediliyor!
       },
     });
     res.json(newEvent);
   } catch (error) {
-    console.error('Error creating event:', error); // Daha iyi log
+    console.error('Error creating event:', error);
     res.status(500).json({ error: 'Failed to create event' });
   }
 });
+
 
 
 // Organizasyonlar
@@ -76,13 +78,15 @@ app.get('/organizations', async (req, res) => {
 });
 
 app.post('/organizations', async (req, res) => {
-  const { name, description, ownerId } = req.body;
+  const { name, description, ownerId, bannerUrl } = req.body;
+
   try {
     const organization = await prisma.organization.create({
       data: {
         name,
         description,
         owner: { connect: { id: ownerId } },
+        bannerUrl: bannerUrl || null,
       },
     });
     res.json(organization);
@@ -90,6 +94,7 @@ app.post('/organizations', async (req, res) => {
     res.status(500).json({ error: 'Failed to create organization' });
   }
 });
+
 
 app.post('/organizations/:id/join', async (req, res) => {
   const { id } = req.params;

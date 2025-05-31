@@ -23,58 +23,32 @@ export default function OrganizationDetailPage() {
   if (!organization) {
     return (
       <div className="p-8">
-        <h1 className="text-3xl font-bold">Loading organization...</h1>
+        <h1 className="text-3xl font-bold">Organizasyon yükleniyor...</h1>
       </div>
     );
   }
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-3xl font-bold text-blue-600">Organization Details</h1>
-      <Card>
-        <CardContent className="p-4 space-y-2">
-          <p>
-            <strong>ID:</strong> {organization.id}
-          </p>
-          <p>
-            <strong>Name:</strong> {organization.name}
-          </p>
-          <p>
-            <strong>Description:</strong> {organization.description}
-          </p>
-          <p>
-            <strong>Owner:</strong> {organization.owner?.name} (ID: {organization.owner?.id})
-          </p>
+      <h1 className="text-4xl font-bold text-[#7E0FBA]">Organizasyon Detayı</h1>
 
-          <div className="mt-4">
-            <strong>Members:</strong>
-            {organization.members.length > 0 ? (
-              <ul className="list-disc list-inside ml-4">
-                {organization.members.map((member: any) => (
-                  <li key={member.id}>
-                    {member.user?.name} (ID: {member.user?.id})
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No members.</p>
-            )}
-          </div>
+      <Card className="max-w-4xl mx-auto">
+        <CardContent className="p-0">
+          {/* Banner */}
+          {organization.bannerUrl && (
+            <img
+              src={organization.bannerUrl}
+              alt={organization.name}
+              className="w-full h-64 object-cover rounded-t-md"
+            />
+          )}
 
-          <div className="mt-4">
-            <strong>Events:</strong>
-            {organization.events.length > 0 ? (
-              <ul className="list-disc list-inside ml-4">
-                {organization.events.map((event: any) => (
-                  <li key={event.id}>
-                    {event.title} - {event.location} -{" "}
-                    {new Date(event.date).toLocaleDateString()}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No events.</p>
-            )}
+          <div className="p-6 space-y-4">
+            <h2 className="text-3xl font-bold text-[#7E0FBA]">{organization.name}</h2>
+            <p className="text-gray-600">{organization.description}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Sahip (Owner) ID: {organization.ownerId}
+            </p>
           </div>
         </CardContent>
       </Card>

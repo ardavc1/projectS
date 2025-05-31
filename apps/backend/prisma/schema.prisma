@@ -13,17 +13,20 @@ model User {
   name      String?
   password  String
   createdAt DateTime @default(now())
+  imageUrl  String?  // profil fotoğrafı
 
   // Relations
   ownedOrganizations Organization[] @relation("OwnedOrganizations")
   memberOrganizations OrganizationMembership[]
 }
 
+
 model Organization {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
   createdAt   DateTime @default(now())
+  bannerUrl   String?  // organizasyon banner görseli
 
   // Owner
   ownerId     Int
@@ -31,9 +34,9 @@ model Organization {
   
   // Members
   members     OrganizationMembership[]
-
   events      Event[]
 }
+
 
 model OrganizationMembership {
   id               Int  @id @default(autoincrement())
@@ -53,8 +56,10 @@ model Event {
   location       String
   date           DateTime
   createdAt      DateTime @default(now())
+  imageUrl       String?  // etkinlik görseli
 
   // Organization relation
   organizationId Int
   organization   Organization @relation(fields: [organizationId], references: [id])
 }
+
